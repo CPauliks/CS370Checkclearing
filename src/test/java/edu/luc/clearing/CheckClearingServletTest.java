@@ -37,4 +37,20 @@ public class CheckClearingServletTest {
     	assertEquals(800, servlet.parseAmount("eight").intValue());
     	assertEquals(900, servlet.parseAmount("nine").intValue());
     }
+    
+    @Test
+    public void shouldIgnoreCase() throws Exception{
+    	assertEquals(300, servlet.parseAmount("Three").intValue());
+    }
+    
+    @Test
+    public void shouldeIgnoreMalformedAmounts() throws Exception {
+    	assertEquals("{}", servlet.response(new StringReader("[\"purple\"]")));
+
+    }
+    
+    @Test
+    public void shouldHandleZeroAmounts() throws Exception {
+    	assertEquals(0, servlet.parseAmount("zero").intValue());
+    }
 }
