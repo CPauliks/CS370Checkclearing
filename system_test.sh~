@@ -1,0 +1,5 @@
+#!/bin/bash
+
+server=${1-localhost:8085}
+
+curl -H Content-Type:application/json -d '["one"]' --trace - http://$server/checkclearing
