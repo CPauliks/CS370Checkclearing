@@ -1,56 +1,46 @@
 package edu.luc.clearing;
 
-import static org.junit.Assert.assertEquals;
-
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import org.junit.*;
+import java.io.BufferedReader;
+import java.io.CharArrayWriter;
+import java.io.PrintWriter;
 import java.io.StringReader;
 
-import org.junit.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class CheckClearingServletTest {
 	CheckClearingServlet servlet;
+	private HttpServletResponse mockResponse;
+	private HttpServletRequest mockRequest;
+	private CharArrayWriter writer;
 	
 	@Before
-	public void setup(){
+	public void setup() throws Exception{
 		servlet = new CheckClearingServlet();
+		mockResponse = mock(HttpServletResponse.class);
+		mockRequest = mock(HttpServletRequest.class);
+		BufferedReader reader = new BufferedReader(new StringReader("[]"));
+		writer = new CharArrayWriter();
+		
+		when(mockRequest.getReader()).thenReturn(reader);
+		when(mockResponse.getWriter()).thenReturn(new PrintWriter(writer));
 	}
 	
-    @Test
-    public void shouldReturnAnEmptyObjectForAnEmptyRequest() throws Exception {
-        assertEquals("{}", servlet.response(new StringReader("[]")));
-    }
-    
-    @Test
-    public void shouldReturnCentsForCheckValues() throws Exception{
-    	assertEquals("{\"one\":100}", servlet.response(new StringReader("[\"one\"]")));
-    	assertEquals("{\"seven\":700}", servlet.response(new StringReader("[\"seven\"]")));
-    }
-    
-    @Test
-    public void shouldParseWholeValuesLessThanTen() throws Exception{
-    	assertEquals(100, servlet.parseAmount("one").intValue());
-    	assertEquals(200, servlet.parseAmount("two").intValue());
-    	assertEquals(300, servlet.parseAmount("three").intValue());
-    	assertEquals(400, servlet.parseAmount("four").intValue());
-    	assertEquals(500, servlet.parseAmount("five").intValue());
-    	assertEquals(600, servlet.parseAmount("six").intValue());
-    	assertEquals(700, servlet.parseAmount("seven").intValue());
-    	assertEquals(800, servlet.parseAmount("eight").intValue());
-    	assertEquals(900, servlet.parseAmount("nine").intValue());
-    }
-    
-    @Test
-    public void shouldIgnoreCase() throws Exception{
-    	assertEquals(300, servlet.parseAmount("Three").intValue());
-    }
-    
-    @Test
-    public void shouldeIgnoreMalformedAmounts() throws Exception {
-    	assertEquals("{}", servlet.response(new StringReader("[\"purple\"]")));
+	@Test
+	public void setsContentTypeforTheResponse() throws Exception{
 
-    }
-    
-    @Test
-    public void shouldHandleZeroAmounts() throws Exception {
-    	assertEquals(0, servlet.parseAmount("zero").intValue());
-    }
+		servlet.doPost(mockRequest,mockResponse);
+		verify(mockResponse).setContentType("application/json");
+	}
+	
+	@Test
+	public void writesAResponseObject() throws Exception{
+		servlet.doPost(mockRequest, mockResponse);
+		assertThat(writer.toString(), is(equalTo("{}")));
+	}
+	
 }

@@ -5,15 +5,15 @@ import static org.hamcrest.CoreMatchers.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.luc.clearing.CheckClearingServlet;
+import edu.luc.clearing.CheckParser;
 
 public class AcceptanceTest {
 
-	private CheckClearingServlet servlet;
+	private CheckParser parser;
 	
 	@Before
 	public void setup(){
-		servlet = new CheckClearingServlet();
+		parser = new CheckParser();
 	}
 	
     @Test
@@ -30,7 +30,7 @@ public class AcceptanceTest {
     }
 
 	private int parsedAmountOf(String amount) {
-		return servlet.parseAmount(amount).intValue();
+		return parser.parseAmount(amount).intValue();
 	}
     
     
