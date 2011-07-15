@@ -2,9 +2,10 @@
 
 server=${1-localhost:8085}
 
-response=`curl -H Content-Type:application/json -d '["one"]' http://$server/checkclearing`
+response=`curl -H Content-Type:application/json -d '["one and 22/100"]' 
+http://$server/checkclearing`
 
-if [ $response != '{"one":100}' ]; then
+if [ $response != '{"one and 22/100":122}' ]; then
 	echo 'TEST FAILED OH NOES!'
 	exit 1
 else

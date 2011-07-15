@@ -25,6 +25,7 @@ public class RequestReaderTest {
     public void shouldReturnCentsForCheckValues() throws Exception{
     	assertEquals("{\"one\":100}", requestReader.respond(new StringReader("[\"one\"]")));
     	assertEquals("{\"seven\":700}", requestReader.respond(new StringReader("[\"seven\"]")));
+    	assertEquals("{\"twenty\":2000}", requestReader.respond(new StringReader("[\"twenty\"]")));
     }
     
     @Test
