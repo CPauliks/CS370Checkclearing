@@ -7,35 +7,35 @@ public class CheckParser {
     
     public CheckParser(){
     	AMOUNTS.put("zero", 0);
-    	AMOUNTS.put("one", 100);
-    	AMOUNTS.put("two", 200);
-    	AMOUNTS.put("three", 300);
-    	AMOUNTS.put("four", 400);
-    	AMOUNTS.put("five", 500);
-    	AMOUNTS.put("six", 600);
-    	AMOUNTS.put("seven", 700);
-    	AMOUNTS.put("eight", 800);
-    	AMOUNTS.put("nine", 900);
-    	AMOUNTS.put("ten", 1000);
-    	AMOUNTS.put("eleven", 1100);
-    	AMOUNTS.put("twelve", 1200);
-    	AMOUNTS.put("thirteen", 1300);
-    	AMOUNTS.put("fourteen", 1400);
-    	AMOUNTS.put("fifteen", 1500);
-    	AMOUNTS.put("sixteen", 1600);
-    	AMOUNTS.put("seventeen", 1700);
-    	AMOUNTS.put("eighteen", 1800);
-    	AMOUNTS.put("nineteen", 1900);
-    	AMOUNTS.put("twenty", 2000);
-    	AMOUNTS.put("thirty", 3000);
-    	AMOUNTS.put("forty", 4000);
-    	AMOUNTS.put("fifty", 5000);
-    	AMOUNTS.put("sixty", 6000);
-    	AMOUNTS.put("seventy", 7000);
-    	AMOUNTS.put("eighty", 8000);
-    	AMOUNTS.put("ninety", 9000);
-    	AMOUNTS.put("and", 0); //could delete it but the code is more streamlined otherwise to just say it's 0
-    	//code shinyness vs extra time spent on a get operation, I guess
+    	AMOUNTS.put("one", 1);
+    	AMOUNTS.put("two", 2);
+    	AMOUNTS.put("three", 3);
+    	AMOUNTS.put("four", 4);
+    	AMOUNTS.put("five", 5);
+    	AMOUNTS.put("six", 6);
+    	AMOUNTS.put("seven", 7);
+    	AMOUNTS.put("eight", 8);
+    	AMOUNTS.put("nine", 9);
+    	AMOUNTS.put("ten", 10);
+    	AMOUNTS.put("eleven", 11);
+    	AMOUNTS.put("twelve", 12);
+    	AMOUNTS.put("thirteen", 13);
+    	AMOUNTS.put("fourteen", 14);
+    	AMOUNTS.put("fifteen", 15);
+    	AMOUNTS.put("sixteen", 16);
+    	AMOUNTS.put("seventeen", 17);
+    	AMOUNTS.put("eighteen", 18);
+    	AMOUNTS.put("nineteen", 19);
+    	AMOUNTS.put("twenty", 20);
+    	AMOUNTS.put("thirty", 30);
+    	AMOUNTS.put("forty", 40);
+    	AMOUNTS.put("fourty", 40);
+    	AMOUNTS.put("fifty", 50);
+    	AMOUNTS.put("sixty", 60);
+    	AMOUNTS.put("seventy", 70);
+    	AMOUNTS.put("eighty", 80);
+    	AMOUNTS.put("ninety", 90);
+    	AMOUNTS.put("no", 0);
     }
     
 	public Integer parseAmount(String amount) {
@@ -43,43 +43,63 @@ public class CheckParser {
 		String[] substrings = amount.split("\\W");
 		int len = substrings.length;
 		Integer sum = 0;
-		
-		if (substrings[len-1].equals("100")){ //contains cents
+		String tempString = "";
+		boolean parsingCents = false;
+		boolean foundDollar = false;
+		for (int i = 0; i < len; i++){
+			tempString = substrings[i];
 			
-			for (int i = 0; i < len - 2; i++){//add all words before the cents
-				
-				try{
-					sum += AMOUNTS.get(substrings[i]);	
+			if (tempString.equals("and") || (tempString.equals("dollar") || tempString.equals("dollars"))){
+				parsingCents = true;
+				foundDollar = true;
+			}
+			
+			else if ((tempString.equals("cent") || tempString.equals("cents"))){
+				if (i == len -1){
+					if(!parsingCents){
+						return sum/100;
+					}
+					return sum;
 				}
-			
-				catch (NullPointerException e) {//some junk word there is NaN
-					return null;
+				else {
+					return null; //cents wasn't at the end and I don't what to know what's going on here
 				}
-					 
 			}
 			
-			try{ //add the cents
-				sum += new Integer (substrings[len-2]);	
+			else if (tempString.equals("100")){
+				if(!foundDollar){
+					tempString = substrings[i-1];
+					sum -= (100 * new Integer(tempString));
+					sum += new Integer(tempString);
+					parsingCents = true;
+				}
 			}
-		
-			catch (NullPointerException e) {
-				return null;
-			}
+			
+			else{
+				try { //let's see if it's a string
+					if(!parsingCents){
+						sum += (100*AMOUNTS.get(tempString));
+					}
+					else{
+						sum += (AMOUNTS.get(tempString));
+					}
+				}
+				catch (NullPointerException npe){ //not a string, let's see if it's a number
+					try {
+						if(!parsingCents){
+							sum += 100*new Integer(tempString);
+						}
+						else{
+							sum += new Integer(tempString);
+						}
+					}
+					catch (NumberFormatException nfe){ //neither a string nor a number
+						return null;
+					}
+				}
 
-		}
-		
-		else { //does not contain cents
-			
-			for (int i = 0; i < len; i++){ //add all words
-
-				try{
-					 sum += AMOUNTS.get(substrings[i]);
-				}
-			
-				catch (NullPointerException e) {//some junk word there is NaN
-					return null;
-				}
 			}
+			
 		}
 		
 		return sum;

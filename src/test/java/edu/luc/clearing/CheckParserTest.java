@@ -1,9 +1,10 @@
 package edu.luc.clearing;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-import static org.hamcrest.CoreMatchers.*;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 public class CheckParserTest {
 
@@ -54,6 +55,31 @@ public class CheckParserTest {
     @Test
     public void shouldHandleZeroAmounts() throws Exception {
     	assertEquals(0, parser.parseAmount("zero").intValue());
+    }
+    
+    @Test
+    public void shouldHandleWordsAndNumbers() throws Exception{
+    	assertEquals(300, parser.parseAmount("Three").intValue());
+    	assertEquals(300, parser.parseAmount("3 dollars").intValue());
+    }
+    
+    @Test
+    public void shouldHandleCents() throws Exception{
+    	assertEquals(55, parser.parseAmount("fifty five cent").intValue());
+    	assertEquals(50, parser.parseAmount("fifty cents").intValue());
+    	assertEquals(50, parser.parseAmount("50 cent").intValue());
+    	assertEquals(50, parser.parseAmount("50/100 cents").intValue());
+    }
+    
+    @Test
+    public void shouldHandleCombinedCrazyAmounts() throws Exception{
+    	assertEquals(6821, parser.parseAmount("sixty eight and twenty one cents").intValue());
+    	assertEquals(8512, parser.parseAmount("eighty five dollars 12/100").intValue());
+    	assertEquals(8512, parser.parseAmount("eighty five dollars 12 cents").intValue());
+    	assertEquals(8512, parser.parseAmount("eighty five and twelve cents").intValue());
+    	assertEquals(8512, parser.parseAmount("eighty five dollars 12/100 cents").intValue());
+    	assertEquals(8512, parser.parseAmount("eighty five dollars and 12/100 cents").intValue());
+    	assertEquals(9999, parser.parseAmount("ninety nine and 99/100 dollars ").intValue());
     }
 
 }

@@ -1,19 +1,22 @@
 package edu.luc.clearing;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.StringReader;
 
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.*;
 
 public class RequestReaderTest {
 
 	private RequestReader requestReader;
+	private DataStoreAdapter dataStore;
 
 	@Before
 	public void setup(){
-		requestReader = new RequestReader();
+		dataStore = mock(DataStoreAdapter.class);
+		requestReader = new RequestReader(dataStore);
 	}
 	
     @Test
@@ -32,6 +35,12 @@ public class RequestReaderTest {
     public void shouldeIgnoreMalformedAmounts() throws Exception {
     	assertEquals("{}", requestReader.respond(new StringReader("[\"purple\"]")));
 
+    }
+    
+    @Test
+    public void shouldSaveAmountsInDataStore() throws Exception{
+    	requestReader.respond(new StringReader("[\"one\"]"));
+    	verify(dataStore).saveRow("Amount","one");
     }
 
 }
