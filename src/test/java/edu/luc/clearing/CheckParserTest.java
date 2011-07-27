@@ -37,12 +37,12 @@ public class CheckParserTest {
     @Test
     public void shouldeParseWholeValuesGreaterThanTen() throws Exception{
     	assertThat(parser.parseAmount("twenty").intValue(), is(equalTo(2000)));
-    	assertThat(parser.parseAmount("forty-five").intValue(), is(equalTo(4500)));
+    	assertThat(parser.parseAmount("forty five").intValue(), is(equalTo(4500)));
     }
     
 	@Test
 	public void shouldeParseCombinedValues() throws Exception {
-		assertThat(parser.parseAmount("sixty-three and 44/100").intValue(), is(equalTo(6344)));
+		assertThat(parser.parseAmount("sixty three and 44/100").intValue(), is(equalTo(6344)));
 		assertThat(parser.parseAmount("fourteen and 57/100").intValue(), is(equalTo(1457)));
 	}
 	
@@ -80,6 +80,19 @@ public class CheckParserTest {
     	assertEquals(8512, parser.parseAmount("eighty five dollars 12/100 cents").intValue());
     	assertEquals(8512, parser.parseAmount("eighty five dollars and 12/100 cents").intValue());
     	assertEquals(9999, parser.parseAmount("ninety nine and 99/100 dollars ").intValue());
+    }
+    
+    @Test
+    public void shouldIgnoreInitialAndTrailingSpaces() throws Exception{
+    	assertEquals(101, parser.parseAmount(" one dollars and one cent").intValue());
+    	assertEquals(101, parser.parseAmount("one dollars and one cent ").intValue());
+    	assertEquals(101, parser.parseAmount(" one dollars and one cent ").intValue());
+    }
+    
+    @Test
+    public void shouldAllow100AsAFraction() throws Exception{
+    	assertEquals(200, parser.parseAmount("one and 100/100").intValue());
+    	assertEquals(100, parser.parseAmount("100/100").intValue());
     }
 
 }

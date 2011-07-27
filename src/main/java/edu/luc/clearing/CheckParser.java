@@ -36,22 +36,22 @@ public class CheckParser {
     	AMOUNTS.put("eighty", 80);
     	AMOUNTS.put("ninety", 90);
     	AMOUNTS.put("no", 0);
+    	AMOUNTS.put("",0);
+    	AMOUNTS.put("-", 0);
     }
     
 	public Integer parseAmount(String amount) {
 		amount = amount.toLowerCase();
-		String[] substrings = amount.split("\\W");
+		String[] substrings = amount.split("\\s");
 		int len = substrings.length;
 		Integer sum = 0;
 		String tempString = "";
 		boolean parsingCents = false;
-		boolean foundDollar = false;
 		for (int i = 0; i < len; i++){
 			tempString = substrings[i];
 			
 			if (tempString.equals("and") || (tempString.equals("dollar") || tempString.equals("dollars"))){
 				parsingCents = true;
-				foundDollar = true;
 			}
 			
 			else if ((tempString.equals("cent") || tempString.equals("cents"))){
@@ -66,13 +66,10 @@ public class CheckParser {
 				}
 			}
 			
-			else if (tempString.equals("100")){
-				if(!foundDollar){
-					tempString = substrings[i-1];
-					sum -= (100 * new Integer(tempString));
-					sum += new Integer(tempString);
-					parsingCents = true;
-				}
+			else if (tempString.indexOf("/100") >= 0){
+				String[] fractionParts = tempString.split("\\W");
+				sum += new Integer(fractionParts[0]);
+				parsingCents = true;
 			}
 			
 			else{
