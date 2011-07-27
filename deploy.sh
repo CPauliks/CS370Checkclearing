@@ -22,6 +22,12 @@ if uncommmitted_changes; then
 	exit 1
 fi
 
+gradle clean build
+
+if [ "$?" -gt 0 ]; then
+	exit 1
+fi
+
 echo "Exiting..."
 exit 0
 
