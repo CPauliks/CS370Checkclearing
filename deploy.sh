@@ -8,8 +8,8 @@ function unknown_files {
 }
 
 function uncommmitted_changes {
-	changed_committed=`git diff HEAD --shortstat | grep "0 files changed"`
-	[[ "$changed_committed" == "" ]]
+	changed_committed=`git diff HEAD --shortstat | wc -l`
+	[[ "$changed_committed" -gt 0 ]]
 }
 
 if unknown_files; then
