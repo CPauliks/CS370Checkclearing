@@ -36,7 +36,7 @@ if [ "$?" -gt 0 ]; then
 	exit 1
 fi
 
-gradle gaeRun &
+wait gradle gaeRun &
 server_pid=$!
 
 if [ "$?" -gt 0 ]; then
@@ -45,6 +45,7 @@ if [ "$?" -gt 0 ]; then
 fi
 
 server_status=1
+
 echo -n "Waiting for local server to start..."
 
 while [ "$server_status" -gt 0 ]; do
