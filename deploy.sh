@@ -28,6 +28,14 @@ if [ "$?" -gt 0 ]; then
 	exit 1
 fi
 
+gradle gaeRun &> /dev/null &
+server_pid=$!
+
+if [ "$?" -gt 0 ]; then
+	echo "Server failed to start!"
+	exit 1
+fi
+
 echo "Exiting..."
 exit 0
 
