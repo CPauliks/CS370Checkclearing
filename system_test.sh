@@ -1,13 +1,18 @@
 #!/bin/bash
 
-server="localhost:8085"
+server=${1-localhost:8085}
 
-history=`curl -s cpaulikscs370.appspot.com/checkclearing`
+history=`curl -s http://$server/checkclearing`
 
 echo $history
 
 response=`curl -s -H Content-Type:application/json -d "$history" http://$server/checkclearing`
 
-echo $response
-
+if [ "$response" != "lol" ]; then
+	echo $response
+	echo "OH NOES TEST FAILED"
+	exit 1
+else
+	echo "Test Succeded!"
+fi
 
