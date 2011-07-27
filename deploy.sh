@@ -28,7 +28,7 @@ if [ "$?" -gt 0 ]; then
 	exit 1
 fi
 
-gradle gaeRun &> /dev/null &
+gradle gaeRun &
 server_pid=$!
 
 if [ "$?" -gt 0 ]; then
