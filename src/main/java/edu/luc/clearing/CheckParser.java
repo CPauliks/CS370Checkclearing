@@ -36,12 +36,11 @@ public class CheckParser {
     	AMOUNTS.put("eighty", 80);
     	AMOUNTS.put("ninety", 90);
     	AMOUNTS.put("no", 0);
-    	AMOUNTS.put("",0);
     	AMOUNTS.put("-", 0);
     }
     
 	public Integer parseAmount(String amount) {
-		amount = amount.toLowerCase();
+		amount = amount.trim().toLowerCase();
 		String[] substrings = amount.split("\\s");
 		int len = substrings.length;
 		Integer sum = 0;
@@ -50,7 +49,11 @@ public class CheckParser {
 		for (int i = 0; i < len; i++){
 			tempString = substrings[i];
 			
-			if (tempString.equals("and") || (tempString.equals("dollar") || tempString.equals("dollars"))){
+			if(tempString.startsWith("$")){
+				tempString = tempString.substring(1);
+			}
+			
+			if ((tempString.equals("+") || tempString.equals("and")) || (tempString.equals("dollar") || tempString.equals("dollars"))){
 				parsingCents = true;
 			}
 			

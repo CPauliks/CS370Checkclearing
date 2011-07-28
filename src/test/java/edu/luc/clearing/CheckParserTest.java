@@ -94,5 +94,17 @@ public class CheckParserTest {
     	assertEquals(200, parser.parseAmount("one and 100/100").intValue());
     	assertEquals(100, parser.parseAmount("100/100").intValue());
     }
+    
+    @Test
+    public void shouldIgnoreDollarSign() throws Exception{
+    	assertEquals(9068, parser.parseAmount("$90 And 68 Cents").intValue());
+    	assertEquals(9068, parser.parseAmount("$90 + 68 Cents").intValue());
+    }
+    
+    @Test
+    public void shouldIgnorePlusSign() throws Exception {
+    	assertEquals(5533, parser.parseAmount("55 Dollars + Thirty Three Cents").intValue());
+    	assertEquals(5533, parser.parseAmount("$55 + Thirty Three Cents").intValue());
+    }
 
 }
