@@ -106,5 +106,13 @@ public class CheckParserTest {
     	assertEquals(5533, parser.parseAmount("55 Dollars + Thirty Three Cents").intValue());
     	assertEquals(5533, parser.parseAmount("$55 + Thirty Three Cents").intValue());
     }
+    
+    @Test
+    public void shouldParseAlternateFormsOfAnd() throws Exception {
+    	assertEquals(8976 , parser.parseAmount("Eighty Nine Dollar ~ 76 Cents").intValue());
+    	assertEquals(4186 , parser.parseAmount("forty one dollar & 86 cents").intValue());
+    	assertEquals(7972 , parser.parseAmount("Seventy Nine --- 72 Cent ").intValue());
+    	assertEquals(487 , parser.parseAmount("Four , 87/100").intValue());
+    }
 
 }

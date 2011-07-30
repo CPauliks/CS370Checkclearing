@@ -18,11 +18,16 @@ public class CheckHistory {
 		gson = new Gson();
 	}
 	
-	public String getAmounts() {
+	public String getAmounts(String limitStr) {
+		Integer limit = null;
+		if (limitStr != null) {
+			limit = Integer.parseInt(limitStr);
+		}
 		Set<String> amounts = new HashSet<String>();
-		List<Map<String,Object>> runQuery = storeAdapter.runQuery("Checks");
-		for(Map<String,Object> properties: runQuery){
-			amounts.add(properties.get("Amount").toString());
+		List<Map<String, Object>> runQuery = storeAdapter.runQuery("Checks");
+		for(Map<String, Object> properties : runQuery) {
+			if (limitStr == null || (amounts.size() < limit.intValue()))
+				amounts.add(properties.get("amount").toString());
 		}
 		return gson.toJson(amounts);
 	}

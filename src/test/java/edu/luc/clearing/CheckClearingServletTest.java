@@ -48,7 +48,7 @@ public class CheckClearingServletTest {
 	
 	@Test
 	public void returnsCheckAmountsInAJSONArray() throws Exception {
-		servlet.doGet(null, mockResponse);
+		servlet.doGet(mockRequest, mockResponse);
 		assertThat(writer.toString(), is(equalTo("[]")));
 	}
 	

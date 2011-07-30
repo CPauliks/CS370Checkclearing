@@ -3,33 +3,57 @@ package edu.luc.clearing;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 
 public class CheckHistoryTest {
 
 	private CheckHistory history;
-	private DataStoreAdapter mockDataStoreAdapter;
-	
+	private DataStoreAdapter mockDataStore;
+	private Map<String, Object> check;
+	private ArrayList<Map<String, Object>> checks;
+
 	@Before
 	public void setUp() {
-		mockDataStoreAdapter = mock(DataStoreAdapter.class);
-		history = new CheckHistory(mockDataStoreAdapter);
+		mockDataStore = Mockito.mock(DataStoreAdapter.class);
+		history = new CheckHistory(mockDataStore);
+		check = new HashMap<String, Object>();
+		checks = new ArrayList<Map<String, Object>>();
+		when(mockDataStore.runQuery("Checks")).thenReturn(checks);
 	}
-
-	@Test 
+	
+	@Test
 	public void getRequestReturnsAllThePreviouslyEncounteredCheckAmounts() throws Exception {
+		check.put("amount", "one");
+		checks.add(check);
+		when(mockDataStore.runQuery("Checks")).thenReturn(checks); 
+		assertEquals("[\"one\"]", history.getAmounts(null));
+	}
+	
+	@Test
+	public void doesNotLimitQueryIfNullIsPassedIn() throws Exception {
+		check.put("amount", "one");
+		checks.add(check);
+		assertEquals("[\"one\"]", history.getAmounts(null));
+	}
+	@Test
+	public void canLimitNumberOfChecksReturned() throws Exception {
+		checks.add(createCheck("amount", "one"));
+		checks.add(createCheck("amount", "two"));
+		checks.add(createCheck("amount", "three"));
+		assertEquals("[\"two\",\"one\"]", history.getAmounts("2"));
+	}
+	
+	public Map<String, Object> createCheck(String amount, Object number) {
 		Map<String, Object> check = new HashMap<String, Object>();
-		check.put("Amount", "one");
-		List<Map<String, Object>> checks = Arrays.asList(check);
-		when(mockDataStoreAdapter.runQuery("Checks")).thenReturn(checks);
-		assertEquals("[\"one\"]", history.getAmounts());
+		check.put(amount, number);
+		return check;
 	}
 
 }

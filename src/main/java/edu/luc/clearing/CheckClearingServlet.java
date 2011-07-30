@@ -1,6 +1,6 @@
 package edu.luc.clearing;
-import java.io.IOException;
 
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +12,7 @@ public class CheckClearingServlet extends HttpServlet {
 	private CheckHistory checkHistory;
 	
     public CheckClearingServlet(DataStoreAdapter dataStore) {
-    	requestReader = new RequestReader(dataStore);
+    	requestReader = new RequestReader(dataStore, new SystemClock());
     	checkHistory = new CheckHistory(dataStore);
     }
     
@@ -27,6 +27,6 @@ public class CheckClearingServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("applicataion/json");
-		resp.getWriter().print(checkHistory.getAmounts());
+		resp.getWriter().print(checkHistory.getAmounts(req.getParameter("limit")));
 	}
 }

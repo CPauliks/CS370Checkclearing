@@ -57,6 +57,10 @@ public class CheckParser {
 				parsingCents = true;
 			}
 			
+			else if ((tempString.equals(",") || tempString.equals("~")) || (tempString.equals("---") || tempString.equals("&"))){
+				parsingCents = true;
+			}
+			
 			else if ((tempString.equals("cent") || tempString.equals("cents"))){
 				if (i == len -1){
 					if(!parsingCents){
