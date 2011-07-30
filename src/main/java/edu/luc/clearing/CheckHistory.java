@@ -27,7 +27,7 @@ public class CheckHistory {
 		List<Map<String, Object>> runQuery = storeAdapter.runQuery("Checks");
 		for(Map<String, Object> properties : runQuery) {
 			if (limitStr == null || (amounts.size() < limit.intValue()))
-				amounts.add(properties.get("amount").toString());
+				amounts.add(properties.get("Amount").toString());
 		}
 		return gson.toJson(amounts);
 	}

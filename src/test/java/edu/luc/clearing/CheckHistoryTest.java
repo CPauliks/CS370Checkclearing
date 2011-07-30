@@ -30,7 +30,7 @@ public class CheckHistoryTest {
 	
 	@Test
 	public void getRequestReturnsAllThePreviouslyEncounteredCheckAmounts() throws Exception {
-		check.put("amount", "one");
+		check.put("Amount", "one");
 		checks.add(check);
 		when(mockDataStore.runQuery("Checks")).thenReturn(checks); 
 		assertEquals("[\"one\"]", history.getAmounts(null));
@@ -38,22 +38,30 @@ public class CheckHistoryTest {
 	
 	@Test
 	public void doesNotLimitQueryIfNullIsPassedIn() throws Exception {
-		check.put("amount", "one");
-		checks.add(check);
-		assertEquals("[\"one\"]", history.getAmounts(null));
+		checks.add(createCheck("Amount", "one"));
+		checks.add(createCheck("Amount", "two"));
+		checks.add(createCheck("Amount", "four"));
+		checks.add(createCheck("Amount", "three"));
+		assertEquals("[\"two\",\"one\",\"three\",\"four\"]", history.getAmounts(null));
 	}
 	@Test
 	public void canLimitNumberOfChecksReturned() throws Exception {
-		checks.add(createCheck("amount", "one"));
-		checks.add(createCheck("amount", "two"));
-		checks.add(createCheck("amount", "three"));
+		checks.add(createCheck("Amount", "one"));
+		checks.add(createCheck("Amount", "two"));
+		checks.add(createCheck("Amount", "three"));
 		assertEquals("[\"two\",\"one\"]", history.getAmounts("2"));
 	}
 	
+	@Test (expected = NullPointerException.class)
+	public void canHandleDataStoreReturningNull() throws Exception{
+		when(mockDataStore.runQuery("Checks")).thenReturn(null);
+		history.getAmounts(null);
+	}
+	
 	public Map<String, Object> createCheck(String amount, Object number) {
-		Map<String, Object> check = new HashMap<String, Object>();
-		check.put(amount, number);
-		return check;
+		Map<String, Object> newCheck = new HashMap<String, Object>();
+		newCheck.put(amount, number);
+		return newCheck;
 	}
 
 }
