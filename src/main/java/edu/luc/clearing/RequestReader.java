@@ -32,7 +32,7 @@ public class RequestReader {
 				System.err.println("Could not parse amount:  " + amount);
 			}
 			map.put(amount, parsedValue);
-			dataStore.saveRow("Amount", amount);
+			dataStore.saveCheck("Amount", amount);
 			if (timeSince(startTime) > TWENTY_FIVE_SECONDS) {
 				System.err.println("Ran out of time!");
 				return gson.toJson(map);

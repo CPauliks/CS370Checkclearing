@@ -32,9 +32,16 @@ public class DataStoreAdapter {
 		return properties;
 	}
 
-	public void saveRow(String row, String value) {
+	public void saveCheck(String column, String value) {
 		Entity entity = new Entity("Checks");
-		entity.setProperty(row, value);
+		entity.setProperty(column, value);
+		datastore.put(entity);
+	}
+	
+	public void saveFailedCheck(String column1, String value1, String column2, String value2) {
+		Entity entity = new Entity("FailedChecks");
+		entity.setProperty(column1, value1);
+		entity.setProperty(column2, value2);
 		datastore.put(entity);
 	}
 

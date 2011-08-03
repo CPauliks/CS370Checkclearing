@@ -11,8 +11,8 @@ public class DataStoreAdapterTest {
 	public void  canStoreItems() throws Exception{
 		DatastoreService googlestore = mock(DatastoreService.class);
 		DataStoreAdapter store = new DataStoreAdapter(googlestore);
-		store.saveRow("Amount", "one");
-		verify(store).saveRow("Amount","one");
+		store.saveCheck("Amount", "one");
+		verify(store).saveCheck("Amount","one");
 	}
 
 }

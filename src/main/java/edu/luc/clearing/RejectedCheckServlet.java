@@ -12,6 +12,14 @@ public class RejectedCheckServlet extends HttpServlet {
 	
 	private RejectionHandler rejectionHandler;
 	
+    public RejectedCheckServlet(DataStoreAdapter dataStore) {
+    	rejectionHandler = new RejectionHandler(dataStore);
+    }
+    
+    public RejectedCheckServlet(){
+    	this(new DataStoreAdapter());
+    }
+	
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		rejectionHandler.handle(req.getReader());
