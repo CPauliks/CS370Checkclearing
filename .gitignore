@@ -1,0 +1,10 @@
+\.settings
+.gradle
+.project
+.classpath
+.metadata
+bin
+build
+war
+src/main/webapp/WEB-INF/lib/*
+vendor
