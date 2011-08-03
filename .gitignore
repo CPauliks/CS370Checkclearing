@@ -1,4 +1,4 @@
-.settings
+\.settings
 .gradle
 .project
 .classpath
@@ -8,6 +8,3 @@ build
 war
 src/main/webapp/WEB-INF/lib/*
 vendor
-*.sh
-README.md
-build.gradle
