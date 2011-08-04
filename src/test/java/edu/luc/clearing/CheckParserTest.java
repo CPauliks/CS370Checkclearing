@@ -114,5 +114,22 @@ public class CheckParserTest {
     	assertEquals(7972 , parser.parseAmount("Seventy Nine --- 72 Cent ").intValue());
     	assertEquals(487 , parser.parseAmount("Four , 87/100").intValue());
     }
+    
+    @Test
+    public void shouldParseValuesLessThanThousands() throws Exception {
+    	assertEquals(20000, parser.parseAmount("200").intValue());
+    	assertEquals(20000, parser.parseAmount("two hundred").intValue());
+    }
+    
+    @Test
+    public void shouldIgnoreHyphens() throws Exception {
+    	assertEquals(2504672, parser.parseAmount("twenty-five thousand fourty-six --- seventy-two").intValue());
+    	assertEquals(2504672, parser.parseAmount("twenty - five thousand forty - six --- seventy - two").intValue());
+    }
+    
+    @Test
+    public void shouldParseThousands() throws Exception {
+    	assertEquals(30064411 , parser.parseAmount("Three hundred thousand six hundred forty four and 11/100").intValue());
+    }
 
 }

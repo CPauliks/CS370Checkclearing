@@ -32,7 +32,7 @@ gae {
     downloadSdk = true
 
     appcfg {
-        email = 'glade.dan@gmail.com'
+        email = 'massconfuzion@gmail.com'
         passIn = true
 
         logs {

@@ -36,16 +36,24 @@ public class CheckParser {
     	AMOUNTS.put("eighty", 80);
     	AMOUNTS.put("ninety", 90);
     	AMOUNTS.put("no", 0);
-    	AMOUNTS.put("-", 0);
     }
     
 	public Integer parseAmount(String amount) {
 		amount = amount.trim().toLowerCase();
+		amount = amount.replaceAll("---", ",");
+		amount = amount.replaceAll("-", " ");
+	    amount = amount.replaceAll("\\s+", " "); //remove extra whitespace within string - added to help w/ null pointer exceptions
 		String[] substrings = amount.split("\\s");
 		int len = substrings.length;
 		Integer sum = 0;
 		String tempString = "";
 		boolean parsingCents = false;
+		
+		if (amount.contains("thousand"))
+			return parseThousands(amount);
+		if (amount.contains("hundred"))
+			return parseHundreds(amount);
+		
 		for (int i = 0; i < len; i++){
 			tempString = substrings[i];
 			
@@ -57,7 +65,7 @@ public class CheckParser {
 				parsingCents = true;
 			}
 			
-			else if ((tempString.equals(",") || tempString.equals("~")) || (tempString.equals("---") || tempString.equals("&"))){
+			else if ((tempString.equals(",") || tempString.equals("~")) || (tempString.equals("&"))){
 				parsingCents = true;
 			}
 			
@@ -109,4 +117,21 @@ public class CheckParser {
 		return sum;
 	}
 
+	public Integer parseHundreds(String amount) {
+		String hundredsString[] = amount.split("hundred");
+		Integer total;
+		if (hundredsString.length > 1)
+			total = parseAmount(hundredsString[0]) * 100 + parseAmount(hundredsString[1]);
+		else total = parseAmount(hundredsString[0]) * 100;
+		return total;
+	}
+	
+	public Integer parseThousands(String amount) {
+		String thousandsString[] = amount.split("thousand");
+		Integer total;
+		if (thousandsString.length > 1)
+			total = parseAmount(thousandsString[0]) * 1000 + parseAmount(thousandsString[1]);
+		else total = parseAmount(thousandsString[0]) * 1000;
+		return total;
+	}
 }

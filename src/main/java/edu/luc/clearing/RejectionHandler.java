@@ -20,6 +20,7 @@ public class RejectionHandler {
 		Map<String, Integer> checks = gson.fromJson(reader, requestType());
 		for(String key : checks.keySet()){
 			dataStore.saveFailedCheck("Amount", key, "Value", checks.get(key).toString() );
+			System.err.println("Incorrectly Parsed: "+ key);
 		}
 	}
 	
