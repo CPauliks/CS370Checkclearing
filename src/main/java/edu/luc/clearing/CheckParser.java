@@ -50,9 +50,9 @@ public class CheckParser {
 		boolean parsingCents = false;
 		
 		if (amount.contains("thousand"))
-			return parseThousands(amount);
+			return parseMultiplier(amount, "thousand", 1000);
 		if (amount.contains("hundred"))
-			return parseHundreds(amount);
+			return parseMultiplier(amount, "hundred", 100);
 		
 		for (int i = 0; i < len; i++){
 			tempString = substrings[i];
@@ -116,22 +116,16 @@ public class CheckParser {
 		
 		return sum;
 	}
-
-	public Integer parseHundreds(String amount) {
-		String hundredsString[] = amount.split("hundred");
-		Integer total;
-		if (hundredsString.length > 1)
-			total = parseAmount(hundredsString[0]) * 100 + parseAmount(hundredsString[1]);
-		else total = parseAmount(hundredsString[0]) * 100;
-		return total;
-	}
 	
-	public Integer parseThousands(String amount) {
-		String thousandsString[] = amount.split("thousand");
-		Integer total;
-		if (thousandsString.length > 1)
-			total = parseAmount(thousandsString[0]) * 1000 + parseAmount(thousandsString[1]);
-		else total = parseAmount(thousandsString[0]) * 1000;
+	public Integer parseMultiplier(String amount, String splitWord, int multiplier) {
+		String splitString[] = amount.split(splitWord);
+		Integer total = 0;
+		if (splitString.length > 1){
+			total = parseAmount(splitString[0]) * multiplier + parseAmount(splitString[1]);
+		}
+		else {
+			total = parseAmount(splitString[0]) * multiplier;
+		}
 		return total;
 	}
 }
