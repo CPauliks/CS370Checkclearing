@@ -50,7 +50,7 @@ while [ $server_status -gt 0 ]; do
   sleep 1
 done
 
-history=`curl http://dgladecs370.appspot.com/checkclearing`
+history=`curl http://cpaulikscs370.appspot.com/checkclearing`
 response=`curl -s -H Content-Type:application/json -d "$history" http://localhost:8085/checkclearing`
 
 echo $response | python -mjson.tool > /dev/null
