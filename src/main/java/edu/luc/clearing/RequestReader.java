@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class RequestReader {
 
-	private static final long  TWENTY_FIVE_SECONDS = 25 * 1000;
+	private static final long  TWENTY_EIGHT_SECONDS = 28 * 1000;
 	private CheckParser checkParser;
 	private DataStoreAdapter dataStore;
 	private Clock clock;
@@ -33,7 +33,7 @@ public class RequestReader {
 			}
 			map.put(amount, parsedValue);
 			dataStore.saveCheck("Amount", amount);
-			if (timeSince(startTime) > TWENTY_FIVE_SECONDS) {
+			if (timeSince(startTime) > TWENTY_EIGHT_SECONDS) {
 				System.err.println("Ran out of time!");
 				return gson.toJson(map);
 			}
