@@ -36,7 +36,6 @@ fi
 gradle gaeRun &
 server_pid=$!
 if [ "$?" -gt 0 ]; then
-  #add count to while loop for optional timeout
   echo "Server fialed to start"
   exit 1
 fi
@@ -47,7 +46,7 @@ while [ $server_status -gt 0 ]; do
   echo -n
   curl http://localhost:8085
   server_status=$?
-  sleep 1
+  sleep 10
 done
 
 history=`curl -s  http://cpaulikscs370.appspot.com/checkclearing&limit=200`
