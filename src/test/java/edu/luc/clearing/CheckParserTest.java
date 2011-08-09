@@ -2,6 +2,7 @@ package edu.luc.clearing;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -130,6 +131,15 @@ public class CheckParserTest {
     @Test
     public void shouldParseThousands() throws Exception {
     	assertEquals(30064411 , parser.parseAmount("Three hundred thousand six hundred forty four and 11/100").intValue());
+    }
+    
+    @Test
+    public void shouldIgnoreExcessSpaces() throws Exception {
+    	assertEquals(487 , parser.parseAmount("Four , 87/100").intValue());
+    	assertEquals(101, parser.parseAmount(" one dollars and one cent ").intValue());
+    	assertEquals(101, parser.parseAmount(" one dollars   and one cent ").intValue());
+    	assertEquals(101, parser.parseAmount(" one dollars --- one cent ").intValue());
+    	assertEquals(2505, parser.parseAmount("twenty  - five ---    5/100").intValue());
     }
 
 }

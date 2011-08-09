@@ -42,11 +42,10 @@ public class CheckParser {
 		amount = amount.trim().toLowerCase();
 		amount = amount.replaceAll("---", ",");
 		amount = amount.replaceAll("-", " ");
-	    amount = amount.replaceAll("\\s+", " "); //remove extra whitespace within string - added to help w/ null pointer exceptions
-		String[] substrings = amount.split("\\s");
+		String[] substrings = amount.split("\\s+"); //Splits on any number of spaces now. one less string mutation
 		int len = substrings.length;
 		Integer sum = 0;
-		String tempString = "";
+		String tempString;
 		boolean parsingCents = false;
 		
 		if (amount.contains("thousand"))
@@ -117,7 +116,7 @@ public class CheckParser {
 		return sum;
 	}
 	
-	public Integer parseMultiplier(String amount, String splitWord, int multiplier) {
+	private Integer parseMultiplier(String amount, String splitWord, int multiplier) {
 		String splitString[] = amount.split(splitWord);
 		Integer total = 0;
 		if (splitString.length > 1){
