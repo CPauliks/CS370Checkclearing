@@ -1,9 +1,11 @@
 package edu.luc.clearing;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class CheckParser {
     private static final HashMap<String, Integer> AMOUNTS = new HashMap<String, Integer>();
+    private static final HashSet<String> ANDVALUES = new HashSet<String>();
     
     public CheckParser(){
     	AMOUNTS.put("zero", 0);
@@ -36,95 +38,77 @@ public class CheckParser {
     	AMOUNTS.put("eighty", 80);
     	AMOUNTS.put("ninety", 90);
     	AMOUNTS.put("no", 0);
+    	AMOUNTS.put("", 0);
+    	
+    	ANDVALUES.add("and");
+    	ANDVALUES.add("+");
+    	ANDVALUES.add("~");
+    	ANDVALUES.add(",");
+    	ANDVALUES.add("&");
     }
     
 	public Integer parseAmount(String amount) {
 		amount = amount.trim().toLowerCase();
 		amount = amount.replaceAll("---", ",");
 		amount = amount.replaceAll("-", " ");
+		amount = amount.replaceAll("\\$", "");
+		int currentMultiplier = 1;
 		String[] substrings = amount.split("\\s+"); //Splits on any number of spaces now. one less string mutation
 		int len = substrings.length;
 		Integer sum = 0;
 		String tempString;
-		boolean parsingCents = false;
+		boolean foundAWord = false;
 		
-		if (amount.contains("thousand"))
-			return parseMultiplier(amount, "thousand", 1000);
-		if (amount.contains("hundred"))
-			return parseMultiplier(amount, "hundred", 100);
-		
-		for (int i = 0; i < len; i++){
+		for (int i = len - 1; i >= 0; i--){
+
 			tempString = substrings[i];
 			
-			if(tempString.startsWith("$")){
-				tempString = tempString.substring(1);
+			if (tempString.contains("dollar")){
+				currentMultiplier = 100;
+				foundAWord = true;
 			}
 			
-			if ((tempString.equals("+") || tempString.equals("and")) || (tempString.equals("dollar") || tempString.equals("dollars"))){
-				parsingCents = true;
+			else if (tempString.contains("hundred")){
+				currentMultiplier = 10000;
+				foundAWord = true;
 			}
 			
-			else if ((tempString.equals(",") || tempString.equals("~")) || (tempString.equals("&"))){
-				parsingCents = true;
+			else if (ANDVALUES.contains(tempString)){
+				currentMultiplier = 100;
+				foundAWord= true;
 			}
 			
-			else if ((tempString.equals("cent") || tempString.equals("cents"))){
-				if (i == len -1){
-					if(!parsingCents){
-						return sum/100;
-					}
-					return sum;
-				}
-				else {
-					return null; //cents wasn't at the end and I don't what to know what's going on here
-				}
+			else if (tempString.contains("cent")){
+				currentMultiplier = 1;
+				foundAWord= true;
 			}
 			
-			else if (tempString.indexOf("/100") >= 0){
+			else if (tempString.contains("/100")){
 				String[] fractionParts = tempString.split("\\W");
 				sum += new Integer(fractionParts[0]);
-				parsingCents = true;
+				currentMultiplier = 100;
+				foundAWord= true;
 			}
 			
 			else{
-				try { //let's see if it's a string
-					if(!parsingCents){
-						sum += (100*AMOUNTS.get(tempString));
-					}
-					else{
-						sum += (AMOUNTS.get(tempString));
-					}
+				if(AMOUNTS.containsKey(tempString)){
+					sum += (AMOUNTS.get(tempString) * currentMultiplier);
 				}
-				catch (NullPointerException npe){ //not a string, let's see if it's a number
-					try {
-						if(!parsingCents){
-							sum += 100*new Integer(tempString);
-						}
-						else{
-							sum += new Integer(tempString);
-						}
+				else{
+					try{
+						sum += (new Integer(tempString) * currentMultiplier);
 					}
-					catch (NumberFormatException nfe){ //neither a string nor a number
+					catch (NumberFormatException e){
 						return null;
 					}
 				}
-
 			}
 			
 		}
-		
+		if(!foundAWord){
+			return sum * 100;
+		}
 		return sum;
 	}
 	
-	private Integer parseMultiplier(String amount, String splitWord, int multiplier) {
-		String splitString[] = amount.split(splitWord);
-		Integer total = 0;
-		if (splitString.length > 1){
-			total = parseAmount(splitString[0]) * multiplier + parseAmount(splitString[1]);
-		}
-		else {
-			total = parseAmount(splitString[0]) * multiplier;
-		}
-		return total;
-	}
 }

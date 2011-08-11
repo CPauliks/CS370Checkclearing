@@ -46,12 +46,12 @@ public class RequestReaderTest {
     	verify(dataStore).saveCheck("Amount","one");
     }
     
-//	@Test
-//	public void shouldShortCircuitTheResponseIfItTakeslongerThan25Seconds() throws Exception {
-//		long now = System.currentTimeMillis();
-//		when(clock.currentTime()).thenReturn(now, now + 23 * 1000, now + 26 * 1000);
-//        String response = requestReader.respond(new StringReader("[\"one\", \"two\", \"three\"]"));
-//        assertEquals("{\"two\":200,\"one\":100}", response);
-//	}
+	@Test
+	public void shouldShortCircuitTheResponseIfItTakeslongerThan28Seconds() throws Exception {
+		long now = System.currentTimeMillis();
+		when(clock.currentTime()).thenReturn(now, now + 23 * 1000, now + 29 * 1000);
+        String response = requestReader.respond(new StringReader("[\"one\", \"two\", \"three\"]"));
+        assertEquals("{\"two\":200,\"one\":100}", response);
+	}
 
 }

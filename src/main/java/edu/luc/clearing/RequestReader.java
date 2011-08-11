@@ -35,6 +35,8 @@ public class RequestReader {
 			dataStore.saveCheck("Amount", amount);
 			if (timeSince(startTime) > TWENTY_EIGHT_SECONDS) {
 				System.err.println("Ran out of time!");
+                System.err.println("Request size: " + checks.size());
+                System.err.println("Return size: " + map.size());
 				return gson.toJson(map);
 			}
 		}

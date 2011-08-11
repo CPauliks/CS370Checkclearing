@@ -2,7 +2,6 @@ package edu.luc.clearing;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -104,8 +103,8 @@ public class CheckParserTest {
     
     @Test
     public void shouldIgnorePlusSign() throws Exception {
-    	assertEquals(5533, parser.parseAmount("55 Dollars + Thirty Three Cents").intValue());
-    	assertEquals(5533, parser.parseAmount("$55 + Thirty Three Cents").intValue());
+    	assertEquals(5533, parser.parseAmount("fifty five Dollars + Thirty Three Cents").intValue());
+    	assertEquals(5533, parser.parseAmount("55 + Thirty Three Cents").intValue());
     }
     
     @Test
@@ -124,13 +123,8 @@ public class CheckParserTest {
     
     @Test
     public void shouldIgnoreHyphens() throws Exception {
-    	assertEquals(2504672, parser.parseAmount("twenty-five thousand fourty-six --- seventy-two").intValue());
-    	assertEquals(2504672, parser.parseAmount("twenty - five thousand forty - six --- seventy - two").intValue());
-    }
-    
-    @Test
-    public void shouldParseThousands() throws Exception {
-    	assertEquals(30064411 , parser.parseAmount("Three hundred thousand six hundred forty four and 11/100").intValue());
+    	assertEquals(4672, parser.parseAmount("fourty-six --- seventy-two").intValue());
+    	assertEquals(4672, parser.parseAmount("forty - six --- seventy - two").intValue());
     }
     
     @Test

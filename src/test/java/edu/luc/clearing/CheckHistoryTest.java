@@ -36,21 +36,21 @@ public class CheckHistoryTest {
 		assertEquals("[\"one\"]", history.getAmounts(null));
 	}
 	
-//	@Test
-//	public void doesNotLimitQueryIfNullIsPassedIn() throws Exception {
-//		checks.add(createCheck("Amount", "one"));
-//		checks.add(createCheck("Amount", "two"));
-//		checks.add(createCheck("Amount", "four"));
-//		checks.add(createCheck("Amount", "three"));
-//		assertEquals("[\"two\",\"one\",\"three\",\"four\"]", history.getAmounts(null));
-//	}
-//	@Test
-//	public void canLimitNumberOfChecksReturned() throws Exception {
-//		checks.add(createCheck("Amount", "one"));
-//		checks.add(createCheck("Amount", "two"));
-//		checks.add(createCheck("Amount", "three"));
-//		assertEquals("[\"two\",\"one\"]", history.getAmounts("2"));
-//	}
+	@Test
+	public void doesNotLimitQueryIfNullIsPassedIn() throws Exception {
+		checks.add(createCheck("Amount", "one"));
+		checks.add(createCheck("Amount", "two"));
+		checks.add(createCheck("Amount", "four"));
+		checks.add(createCheck("Amount", "three"));
+		assertEquals("[\"two\",\"one\",\"three\",\"four\"]", history.getAmounts(null));
+	}
+	@Test
+	public void canLimitNumberOfChecksReturned() throws Exception {
+		checks.add(createCheck("Amount", "one"));
+		checks.add(createCheck("Amount", "two"));
+		checks.add(createCheck("Amount", "three"));
+		assertEquals("[\"two\",\"one\"]", history.getAmounts("2"));
+	}
 	
 	@Test (expected = NullPointerException.class)
 	public void canHandleDataStoreReturningNull() throws Exception{
