@@ -52,12 +52,12 @@ public class CheckParser {
 		amount = amount.replaceAll("---", ",");
 		amount = amount.replaceAll("-", " ");
 		amount = amount.replaceAll("\\$", "");
-		int currentMultiplier = 1;
+		int currentMultiplier = 100;
 		String[] substrings = amount.split("\\s+"); //Splits on any number of spaces now. one less string mutation
 		int len = substrings.length;
 		Integer sum = 0;
 		String tempString;
-		boolean foundAWord = false;
+		boolean foundCents = false;
 		
 		for (int i = len - 1; i >= 0; i--){
 
@@ -68,30 +68,30 @@ public class CheckParser {
 			}
 			
 			else if (ANDVALUES.contains(tempString)){
+				if(!foundCents){
+					sum = sum/100;
+				}
 				currentMultiplier = 100;
-				foundAWord= true;
 			}
 			
 			else if (tempString.contains("dollar")){
 				currentMultiplier = 100;
-				foundAWord = true;
 			}
 			
 			else if (tempString.contains("hundred")){
 				currentMultiplier = 10000;
-				foundAWord = true;
 			}
 			
 			else if (tempString.contains("cent")){
+				foundCents = true;
 				currentMultiplier = 1;
-				foundAWord= true;
 			}
 			
 			else if (tempString.contains("/100")){
 				String[] fractionParts = tempString.split("\\W");
 				sum += new Integer(fractionParts[0]);
 				currentMultiplier = 100;
-				foundAWord= true;
+				foundCents = true;
 			}
 			
 			else{
@@ -104,9 +104,7 @@ public class CheckParser {
 			}
 			
 		}
-		if(!foundAWord){
-			return sum * 100;
-		}
+
 		return sum;
 	}
 	

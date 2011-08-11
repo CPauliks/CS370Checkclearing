@@ -119,6 +119,7 @@ public class CheckParserTest {
     public void shouldParseValuesLessThanThousands() throws Exception {
     	assertEquals(20000, parser.parseAmount("200").intValue());
     	assertEquals(20000, parser.parseAmount("two hundred").intValue());
+    	assertEquals(73900, parser.parseAmount("seven hundred thirty nine").intValue());
     }
     
     @Test
