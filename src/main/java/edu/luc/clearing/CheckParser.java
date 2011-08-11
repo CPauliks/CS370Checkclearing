@@ -63,7 +63,16 @@ public class CheckParser {
 
 			tempString = substrings[i];
 			
-			if (tempString.contains("dollar")){
+			if(AMOUNTS.containsKey(tempString)){
+				sum += (AMOUNTS.get(tempString) * currentMultiplier);
+			}
+			
+			else if (ANDVALUES.contains(tempString)){
+				currentMultiplier = 100;
+				foundAWord= true;
+			}
+			
+			else if (tempString.contains("dollar")){
 				currentMultiplier = 100;
 				foundAWord = true;
 			}
@@ -71,11 +80,6 @@ public class CheckParser {
 			else if (tempString.contains("hundred")){
 				currentMultiplier = 10000;
 				foundAWord = true;
-			}
-			
-			else if (ANDVALUES.contains(tempString)){
-				currentMultiplier = 100;
-				foundAWord= true;
 			}
 			
 			else if (tempString.contains("cent")){
@@ -91,16 +95,11 @@ public class CheckParser {
 			}
 			
 			else{
-				if(AMOUNTS.containsKey(tempString)){
-					sum += (AMOUNTS.get(tempString) * currentMultiplier);
+				try{
+					sum += (new Integer(tempString) * currentMultiplier);
 				}
-				else{
-					try{
-						sum += (new Integer(tempString) * currentMultiplier);
-					}
-					catch (NumberFormatException e){
-						return null;
-					}
+				catch (NumberFormatException e){
+					return null;
 				}
 			}
 			

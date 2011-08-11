@@ -1,10 +1,10 @@
 #!/bin/bash
 
-history=`curl -s http://cpaulikscs370.appspot.com/checkclearing?limit=500`
+history=`curl -s http://cpaulikscs370.appspot.com/checkclearing?limit=200`
 
 echo $history
 
-response=`curl -s -H Content-Type:application/json -d "$history" http://cpauliks.cslabs.luc.edu:8085/checkclearing`
+response=`curl -s -H Content-Type:application/json -d "$history" http://cpaulikscs370.appspot.com/checkclearing`
 echo " "
 if [ "$response" != "lol" ]; then
 	echo $response
