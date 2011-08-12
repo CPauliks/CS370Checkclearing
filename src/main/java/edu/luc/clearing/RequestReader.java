@@ -32,7 +32,7 @@ public class RequestReader {
 				System.err.println("Could not parse amount:  " + amount);
 			}
 			map.put(amount, parsedValue);
-			dataStore.saveCheck("Amount", amount);
+			//dataStore.saveCheck("Amount", amount);
 			if (timeSince(startTime) > TWENTY_EIGHT_SECONDS) {
 				System.err.println("Ran out of time!");
                 System.err.println("Request size: " + checks.size());
