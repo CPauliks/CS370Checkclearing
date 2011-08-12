@@ -40,12 +40,6 @@ public class RequestReaderTest {
 
     }
     
-//    @Test
-//    public void shouldSaveAmountsInDataStore() throws Exception{
-//    	requestReader.respond(new StringReader("[\"one\"]"));
-//    	verify(dataStore).saveCheck("Amount","one");
-//    }
-    
 	@Test
 	public void shouldShortCircuitTheResponseIfItTakeslongerThan28Seconds() throws Exception {
 		long now = System.currentTimeMillis();

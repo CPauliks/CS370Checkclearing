@@ -1,6 +1,6 @@
 #!/bin/bash
 
-history=`curl -s http://cpaulikscs370.appspot.com/checkclearing?limit=200`
+history=`curl -s http://cpaulikscs370.appspot.com/checkclearing?limit=100`
 
 echo $history
 
